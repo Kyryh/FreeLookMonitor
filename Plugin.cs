@@ -7,7 +7,7 @@ using GameNetcodeStuff;
 namespace FreeLookMonitor
 {
     [BepInDependency(LethalCompanyInputUtils.LethalCompanyInputUtilsPlugin.ModId)]
-    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin("kyryh.freelookmonitor", PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin
     {
         private static ConfigEntry<float> moveSensitivity;
