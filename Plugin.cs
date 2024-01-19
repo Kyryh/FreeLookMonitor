@@ -89,6 +89,9 @@ namespace FreeLookMonitor
                 if (Input.ZoomOut.IsPressed())
                     self.cam.orthographicSize += zoomSensitivity.Value * Time.deltaTime;
 
+                if (self.cam.orthographicSize < 1)
+                    self.cam.orthographicSize = 1;
+
                 if (direction != Vector3.zero) { 
                     self.cam.transform.position += direction * self.cam.orthographicSize * moveSensitivity.Value * Time.deltaTime / 10;
                     moved = true;
