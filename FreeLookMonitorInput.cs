@@ -34,6 +34,9 @@ namespace FreeLookMonitor {
         [InputAction("<Keyboard>/delete", Name = "Reset position")]
         public InputAction ResetPosition { get; set; }
 
+        [InputAction("<Keyboard>/insert", Name = "Reset zoom")]
+        public InputAction ResetZoom { get; set; }
+
 
     }
 
