@@ -25,14 +25,14 @@ namespace FreeLookMonitor
             moveSensitivity = Config.Bind(
                 "Sensitivity",
                 "MoveSensitivity",
-                30f,
+                20f,
                 "How fast the camera moves"
             );
 
             zoomSensitivity = Config.Bind(
                 "Sensitivity",
                 "ZoomSensitivity",
-                30f,
+                20f,
                 "How fast the camera zooms in/out"
             );
 
