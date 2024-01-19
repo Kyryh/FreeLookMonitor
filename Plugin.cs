@@ -1,6 +1,8 @@
 ﻿using BepInEx;
 using UnityEngine;
 using System.Collections;
+using BepInEx.Configuration;
+using GameNetcodeStuff;
 
 namespace FreeLookMonitor
 {
@@ -8,16 +10,39 @@ namespace FreeLookMonitor
     [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
     public class Plugin : BaseUnityPlugin
     {
+        private static ConfigEntry<float> moveSensitivity;
+
+        private static ConfigEntry<float> zoomSensitivity;
+
+        private static ManualCameraRenderer mcr;
+
         private static FreeLookMonitorInput Input = new FreeLookMonitorInput();
 
         private static bool moved = false;
         private void Awake()
         {
+
+            moveSensitivity = Config.Bind(
+                "Sensitivity",
+                "MoveSensitivity",
+                30f,
+                "How fast the camera moves"
+            );
+
+            zoomSensitivity = Config.Bind(
+                "Sensitivity",
+                "ZoomSensitivity",
+                30f,
+                "How fast the camera zooms in/out"
+            );
+
             // Plugin startup logic
 
             On.ManualCameraRenderer.Update += ManualCameraRenderer_Update;
             On.ManualCameraRenderer.Start += (orig, self) => {
                 orig(self);
+                if (self.cam == self.mapCamera)
+                    mcr = self;
                 ResetPosition();
             };
             On.ManualCameraRenderer.SwitchScreenButton += (orig, self) => {
@@ -36,7 +61,7 @@ namespace FreeLookMonitor
 
 
         private void ManualCameraRenderer_Update(On.ManualCameraRenderer.orig_Update orig, ManualCameraRenderer self) {
-            if (self.cam == self.mapCamera && self.screenEnabledOnLocalClient) {
+            if (self.cam == self.mapCamera && self.screenEnabledOnLocalClient && !StartOfRound.Instance.localPlayerController.isTypingChat) {
                 Vector3 direction = Vector3.zero;
 
                 if (Input.MoveRight.IsPressed()) {
@@ -52,14 +77,20 @@ namespace FreeLookMonitor
                     direction -= self.cam.transform.up;
                 }
                 if (Input.MoveUp.IsPressed()) {
-                    direction -= self.cam.transform.forward;
+                    direction -= self.cam.transform.forward / 5;
                 }
                 if (Input.MoveDown.IsPressed()) {
-                    direction += self.cam.transform.forward;
+                    direction += self.cam.transform.forward / 5;
                 }
 
+                if (Input.ZoomIn.IsPressed())
+                    self.cam.orthographicSize -= zoomSensitivity.Value * Time.deltaTime;
+
+                if (Input.ZoomOut.IsPressed())
+                    self.cam.orthographicSize += zoomSensitivity.Value * Time.deltaTime;
+
                 if (direction != Vector3.zero) { 
-                    self.cam.transform.position += direction;
+                    self.cam.transform.position += direction * self.cam.orthographicSize * moveSensitivity.Value * Time.deltaTime / 10;
                     moved = true;
                     StartOfRound.Instance.mapScreenPlayerName.text = "FREELOOK";
                 }
@@ -72,6 +103,7 @@ namespace FreeLookMonitor
         }
 
         private void ResetPosition() {
+            StartOfRound.Instance.mapScreenPlayerName.text = "MONITORING: " + mcr.radarTargets[mcr.targetTransformIndex].name;
             moved = false;
         }
         
