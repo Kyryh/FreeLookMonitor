@@ -25,15 +25,14 @@ namespace FreeLookMonitor {
         [InputAction("<Keyboard>/pageDown", Name = "Move down")]
         public InputAction MoveDown { get; set; }
 
-        [InputAction("<Keyboard>/insert", Name = "Reset position")]
-        public InputAction ResetPosition { get; set; }
-
-        [InputAction("<Keyboard>/plus", Name = "Zoom in")]
+        [InputAction("<Keyboard>/rightBracket", Name = "Zoom in")]
         public InputAction ZoomIn { get; set; }
 
-        [InputAction("<Keyboard>/minus", Name = "Zoom out")]
+        [InputAction("<Keyboard>/leftBracket", Name = "Zoom out")]
         public InputAction ZoomOut { get; set; }
 
+        [InputAction("<Keyboard>/delete", Name = "Reset position")]
+        public InputAction ResetPosition { get; set; }
 
 
     }
