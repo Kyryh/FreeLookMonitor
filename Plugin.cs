@@ -43,7 +43,7 @@ namespace FreeLookMonitor
                 orig(self);
                 if (self.cam == self.mapCamera)
                     mcr = self;
-                ResetPosition();
+                //ResetPosition();
             };
             On.ManualCameraRenderer.SwitchScreenButton += (orig, self) => {
                 orig(self);
