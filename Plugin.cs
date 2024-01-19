@@ -54,7 +54,8 @@ namespace FreeLookMonitor
                 return orig(self, setRadarTargetIndex, calledFromRPC);
             };
 
-            Input.ResetPosition.performed += obj => ResetPosition();
+            Input.ResetPosition.performed += _ => ResetPosition();
+            Input.ResetZoom.performed += _ => { mcr.cam.orthographicSize = 19.7f; };
 
             Logger.LogInfo($"Plugin {PluginInfo.PLUGIN_GUID} is loaded!");
         }
@@ -76,11 +77,11 @@ namespace FreeLookMonitor
                 if (Input.MoveBackward.IsPressed()) {
                     direction -= self.cam.transform.up;
                 }
-                if (Input.MoveUp.IsPressed()) {
-                    direction -= self.cam.transform.forward / 5;
-                }
                 if (Input.MoveDown.IsPressed()) {
                     direction += self.cam.transform.forward / 5;
+                }
+                if (Input.MoveUp.IsPressed()) {
+                    direction -= self.cam.transform.forward / 5;
                 }
 
                 if (Input.ZoomIn.IsPressed())
