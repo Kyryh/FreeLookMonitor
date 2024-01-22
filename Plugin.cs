@@ -107,6 +107,8 @@ namespace FreeLookMonitor
         }
 
         private void ResetPosition() {
+            if (mcr == null)
+                return;
             StartOfRound.Instance.mapScreenPlayerName.text = "MONITORING: " + mcr.radarTargets[mcr.targetTransformIndex].name;
             moved = false;
         }
